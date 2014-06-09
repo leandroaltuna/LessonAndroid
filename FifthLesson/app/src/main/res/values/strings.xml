@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">FifthLesson</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="label_tweet_search_loader">download tweets&#8230;</string>
+    <string name="label_tweets_not_found">no tweets found.</string>
+    <string name="label_tweets_downloaded">successfully downloaded tweets.</string>
+
+</resources>
