@@ -15,13 +15,16 @@ import com.example.fifthlesson.app.models.Tweet;
 import com.example.fifthlesson.app.utils.ConstantsUtils;
 import com.example.fifthlesson.app.utils.TwitterUtils;
 
-
 import java.util.ArrayList;
 
 
 public class TimelineActivity extends ActionBarActivity {
 
-    ListView lvTimeline;
+    private ListView lvTimeline;
+    private DBOperations dbOperations;
+
+    private TweetAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +37,9 @@ public class TimelineActivity extends ActionBarActivity {
 
     private void updateListView(ArrayList<Tweet> tweets)
     {
-        lvTimeline.setAdapter(new TweetAdapter(this, R.layout.row_tweet, tweets));
+        adapter = new TweetAdapter(this, R.layout.row_tweet, tweets);
+        lvTimeline.setAdapter(adapter);
     }
-
 
 
     @Override
