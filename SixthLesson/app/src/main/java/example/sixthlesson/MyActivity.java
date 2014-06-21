@@ -80,7 +80,12 @@ public class MyActivity extends ActionBarActivity {
 
     public void takePictureFromGallery(View v)
     {
+        Intent intent = new Intent();
 
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
     }
 
 
@@ -104,10 +109,29 @@ public class MyActivity extends ActionBarActivity {
                 }
                 case SELECT_PICTURE:
                 {
+                    Uri selectedImageUri = data.getData();
 
+                    currentPhotoPath = AlbumStorageDirFactory.getImageFromGalleryPath(this, selectedImageUri);
+                    pictureTaken.setImageURI(selectedImageUri);
+
+                    break;
                 }
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        outState.putParcelable(BITMAP_STORAGE_KEY, mImageBitmap);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+        mImageBitmap = savedInstanceState.getParcelable(BITMAP_STORAGE_KEY);
     }
 
     /**
