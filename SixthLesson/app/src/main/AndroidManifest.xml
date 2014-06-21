@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="example.sixthlesson" >
 
+    <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="19" />
+
+    <uses-feature android:name="android.hardware.Camera" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
