@@ -1,6 +1,10 @@
 package com.example.fifthlesson.app;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -24,7 +28,8 @@ public class TimelineActivity extends ActionBarActivity {
     private DBOperations dbOperations;
 
     private TweetAdapter adapter;
-
+    private TimelineReceiver timelineReceiver;
+    private IntentFilter intentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +37,36 @@ public class TimelineActivity extends ActionBarActivity {
         setContentView(R.layout.activity_timeline);
 
         lvTimeline = (ListView) findViewById(R.id.lv_timeline);
+
+        dbOperations = new DBOperations(this);
+        timelineReceiver = new TimelineReceiver();
+        intentFilter = new IntentFilter(ConstantsUtils.NEW_TWEETS_INTENT_FILTER);
         new GetTimelineTask().execute();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(timelineReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(timelineReceiver);
     }
 
     private void updateListView(ArrayList<Tweet> tweets)
     {
         adapter = new TweetAdapter(this, R.layout.row_tweet, tweets);
         lvTimeline.setAdapter(adapter);
+    }
+
+    private void updateListViewWithCache()
+    {
+        adapter = new TweetAdapter(this, R.layout.row_tweet, dbOperations.getStatusUpdates());
+        lvTimeline.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
 
@@ -77,16 +105,11 @@ public class TimelineActivity extends ActionBarActivity {
 
         @Override
         protected ArrayList<Tweet> doInBackground(Object... objects) {
-
             return TwitterUtils.getTimelineForSearchTerm(ConstantsUtils.MEJORANDROID_TERM);
-//            DBOperations dbOperations = new DBOperations(TimelineActivity.this);
-//            return dbOperations.getStatusUpdates();
-
         }
 
         @Override
         protected void onPostExecute(ArrayList<Tweet> timeline) {
-            super.onPostExecute(timeline);
 
             progressDialog.dismiss();
 
@@ -99,6 +122,14 @@ public class TimelineActivity extends ActionBarActivity {
                 updateListView(timeline);
                 Toast.makeText(TimelineActivity.this, getResources().getString(R.string.label_tweets_downloaded), Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    class TimelineReceiver extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateListViewWithCache();
         }
     }
 

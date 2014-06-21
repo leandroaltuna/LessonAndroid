@@ -11,4 +11,6 @@ public class ConstantsUtils {
 
     public static final String MEJORANDROID_TERM = "mejorandophp";
 
+    public static final String NEW_TWEETS_INTENT_FILTER = "com.example.fifthlesson.app.NEW_TWEETS";
+
 }

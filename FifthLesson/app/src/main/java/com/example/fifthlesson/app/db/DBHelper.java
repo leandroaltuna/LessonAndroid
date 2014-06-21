@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String C_SCREEN_NAME = "screen_name";
     public static final String C_IMAGE_PROFILE_URL = "image_profile_url";
     public static final String C_TEXT = "text";
-    public static final String C_CREATED_AT = "created_at";
+    public static final String C_CREATED_AT = "date";
 
     public static final int C_ID_INDEX = 0;
     public static final int C_NAME_INDEX = 1;
